@@ -1,0 +1,16 @@
+app:
+  profile: test
+  host: localhost
+  port: 8080
+log:
+  level: INFO
+security:
+  corsEnabled: false
+db:
+  host: localhost
+  port: 5432
+  pass: 123
+  name: postgres
+  schema: public
+  limit: 20
+  timeout: 30
