@@ -33,10 +33,6 @@ DB_TIMEOUT=10
 LOG_LEVEL=debug
 ```
 
-### Postgres
-create database named `gravitum-test-app-db` and run script `build/sql/ddl/ddl.sql` or migrate `build/sql/migrate/000001_users.up.sql`
-
-
 ### Docker
 1. `docker compose -f docker-compose.yml up -d` to start containers or `make compose`
 
