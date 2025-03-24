@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  webapp:
+    container_name: gravitum-test-app-webapp
+    restart: on-failure
+    ports:
+      - 3001:8080 # probably 8080 will not be available
+    environment:
+      - APP_PROFILE=prod
+      - APP_HOST=0.0.0.0
+      - APP_PORT=8080
+      - DB_HOST=db
+      - DB_USER=postgres
+      - DB_PASS=postgres
+      - DB_PORT=5432
+      - DB_NAME=gravitum_test_app
+      - GIN_MODE=release
+    depends_on:
+      db:
+        condition: service_healthy  # Waits for PostgreSQL to be ready
+    build:
+     context: .
+     dockerfile: build/Dockerfile
+    networks:
+      - gravitum-test-app-net
+
+  db:
+    image: postgres:15.5
+    container_name: gravitum-test-app-db
+    restart: unless-stopped
+    ports:
+      - "5433:5432" # probably 5432 will not be available
+    environment:
+      - POSTGRES_DB=gravitum_test_app
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./build/sql/ddl:/docker-entrypoint-initdb.d/
+      - v-postgres-db:/var/lib/postgresql/data
+    networks:
+      - gravitum-test-app-net
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "gravitum_test_app"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+networks:
+  gravitum-test-app-net:
+
+volumes:
+  v-postgres-db:

@@ -65,7 +65,7 @@ func (cfg Config) Print() {
 
 func (c Db) GetDsn() string {
 	return fmt.Sprintf(
-		"user=%s password=%s host=%s port=%s dbname=%s sslmode=disable",
+		"postgresql://%s:%s@%s:%s/%s?sslmode=disable",
 		c.User,
 		c.Pass,
 		c.Host,
